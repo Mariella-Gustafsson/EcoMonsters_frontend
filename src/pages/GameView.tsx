@@ -1,5 +1,7 @@
+import Header from "../components/layout/header";
+
 function GameView() {
-  return <div>Game View</div>;
+  return <Header />;
 }
 
 export default GameView;
