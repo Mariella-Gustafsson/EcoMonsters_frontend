@@ -1,0 +1,65 @@
+@font-face {
+  font-family: "BlackAndWhitePicture";
+  src: url("../assets/fonts/BlackAndWhitePicture-Regular.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "CherryBombOne";
+  src: url("../assets/fonts/CherryBombOne-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NotoSans";
+  src: url("../assets/fonts/NotoSans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.game-screen {
+  display: flex;
+  flex-direction: column;
+  background-image: url("http://localhost:3000/images/background.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.9;
+}
+
+.game-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+img {
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+}
