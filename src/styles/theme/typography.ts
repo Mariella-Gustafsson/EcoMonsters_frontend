@@ -17,5 +17,6 @@ export const typography = {
     md: "1rem", // 16px
     lg: "1.25rem", // 20px
     xl: "1.5rem", // 24px
+    xxl: "2rem", // 32px
   },
 };

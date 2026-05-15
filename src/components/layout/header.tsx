@@ -7,6 +7,7 @@ export default function Header() {
   return (
     <header className="game-header">
       <div style={{ padding: spacing.md }} className="logo-container">
+        <Button label="?" />
         <img src={logo} alt="EcoMonsters Logo" className="game-logo" />
         <Button label="Monsters" />
       </div>
