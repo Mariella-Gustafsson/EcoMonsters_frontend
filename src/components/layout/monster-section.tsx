@@ -4,10 +4,9 @@ export default function MonsterSection() {
   const styles = {
     sectionContainer: {
       display: "flex",
-      flex: 0.5,
+      flex: 1,
       justifyContent: "center",
       gap: "20px",
-      marginBottom: "25px",
     },
   };
 
