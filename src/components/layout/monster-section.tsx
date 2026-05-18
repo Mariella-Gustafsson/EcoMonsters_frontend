@@ -6,7 +6,8 @@ export default function MonsterSection() {
       display: "flex",
       flex: 0.5,
       justifyContent: "center",
-      gap: "70px",
+      gap: "20px",
+      marginBottom: "25px",
     },
   };
 
