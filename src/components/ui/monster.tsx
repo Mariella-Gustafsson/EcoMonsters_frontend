@@ -25,6 +25,7 @@ export default function Monster({ name, image }: MonsterProps) {
       padding: "30px",
       paddingBottom: "0px",
       opacity: 1,
+      filter: `drop-shadow(${colors.shadow})`,
     },
     monsterName: {
       margin: "0px",

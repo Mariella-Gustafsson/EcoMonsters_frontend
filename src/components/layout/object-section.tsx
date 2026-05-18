@@ -1,11 +1,10 @@
+import Object from "../ui/object";
+
 export default function ObjectSection() {
   const styles = {
-    sectionStyle: {
-      backgroundColor: "#f1ddc4",
-      opacity: 0.6,
+    objectContainer: {
       width: "20%",
       borderRadius: "20px",
-      margin: "20px",
     },
     sectionContainer: {
       display: "flex",
@@ -18,7 +17,9 @@ export default function ObjectSection() {
 
   return (
     <div style={styles.sectionContainer}>
-      <div style={styles.sectionStyle} className="object-section"></div>
+      <div style={styles.objectContainer} className="object-section">
+        <Object />
+      </div>
     </div>
   );
 }

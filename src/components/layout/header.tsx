@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <header className="game-header">
       <div className="logo-container">
-        <Button label="?" />
+        <Button label="?" rounded={true} />
         <img src={logo} alt="EcoMonsters Logo" className="game-logo" />
         <Button label="Monsters" />
       </div>
