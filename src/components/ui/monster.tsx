@@ -1,13 +1,18 @@
 import type { CSSProperties } from "react";
 import { colors, typography } from "../../styles/theme";
 import CircleIcon from "./circle-icon";
+import { useDroppable } from "@dnd-kit/core";
 
 interface MonsterProps {
   name?: string;
   image?: string;
+  dropId?: string;
 }
 
-export default function Monster({ name, image }: MonsterProps) {
+export default function Monster({ name, image, dropId }: MonsterProps) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: `${dropId}`,
+  });
   const styles: {
     sectionStyle: CSSProperties;
     monsterImage: CSSProperties;
@@ -15,7 +20,7 @@ export default function Monster({ name, image }: MonsterProps) {
   } = {
     sectionStyle: {
       position: "relative",
-      backgroundColor: "#f1ddc460",
+      backgroundColor: isOver ? "white" : "#f1ddc460",
       width: "15%",
       borderRadius: "20px",
     },
@@ -38,7 +43,7 @@ export default function Monster({ name, image }: MonsterProps) {
   };
 
   return (
-    <div style={styles.sectionStyle}>
+    <div style={styles.sectionStyle} ref={setNodeRef}>
       <CircleIcon />
       <img style={styles.monsterImage} src={image} alt={name} />
       <h3 style={styles.monsterName}>{name}</h3>

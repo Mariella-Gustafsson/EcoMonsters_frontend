@@ -1,7 +1,11 @@
 import Object from "../ui/object";
+import type { CSSProperties } from "react";
 
 export default function ObjectSection() {
-  const styles = {
+  const styles: {
+    sectionContainer: CSSProperties;
+    objectContainer: CSSProperties;
+  } = {
     objectContainer: {
       width: "20%",
       borderRadius: "20px",
