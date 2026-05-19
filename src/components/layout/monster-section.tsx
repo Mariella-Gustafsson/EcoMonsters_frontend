@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import Monster from "../ui/monster";
+import type { Monster as MonsterType } from "../../types/monster";
+import type { MonsterAPI } from "../../types/monster";
 
 interface MonsterSectionProps {
   correctAnswer: boolean | null;
@@ -12,40 +14,28 @@ export default function MonsterSection({
   dropId,
   setCorrectAnswer,
 }: MonsterSectionProps) {
-  const [monsters, setMonsters] = useState([
-    {
-      name: "Kompostina",
-      image: "http://localhost:3000/images/Kompostina-neutral.png",
-      imageNeutral: "http://localhost:3000/images/Kompostina-neutral.png",
-      imageHappy: "http://localhost:3000/images/Kompostina-happy.png",
-      imageSad: "http://localhost:3000/images/Kompostina-sad.png",
-      dropId: "organic",
-    },
-    {
-      name: "Plastella",
-      image: "http://localhost:3000/images/Kompostina-neutral.png",
-      imageNeutral: "http://localhost:3000/images/Kompostina-neutral.png",
-      imageHappy: "http://localhost:3000/images/Kompostina-happy.png",
-      imageSad: "http://localhost:3000/images/Kompostina-sad.png",
-      dropId: "plastic",
-    },
-    {
-      name: "Cartonix",
-      image: "http://localhost:3000/images/Kompostina-neutral.png",
-      imageNeutral: "http://localhost:3000/images/Kompostina-neutral.png",
-      imageHappy: "http://localhost:3000/images/Kompostina-happy.png",
-      imageSad: "http://localhost:3000/images/Kompostina-sad.png",
-      dropId: "carton",
-    },
-    {
-      name: "Glasmo",
-      image: "http://localhost:3000/images/Kompostina-neutral.png",
-      imageNeutral: "http://localhost:3000/images/Kompostina-neutral.png",
-      imageHappy: "http://localhost:3000/images/Kompostina-happy.png",
-      imageSad: "http://localhost:3000/images/Kompostina-sad.png",
-      dropId: "glass",
-    },
-  ]);
+  const [monsters, setMonsters] = useState<MonsterType[]>([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/monsters")
+      .then((response) => response.json())
+      .then((data) => {
+        setMonsters(
+          data.map((monster: MonsterAPI) => ({
+            id: monster.id,
+            description: monster.description,
+            name: monster.name,
+            image: `http://localhost:5000${monster.monster_neutral_image_url}`,
+            imageNeutral: `http://localhost:5000${monster.monster_neutral_image_url}`,
+            imageHappy: `http://localhost:5000${monster.monster_happy_image_url}`,
+            imageSad: `http://localhost:5000${monster.monster_sad_image_url}`,
+            materialType: monster.material_type,
+            monsterIcon: `http://localhost:5000${monster.monster_icon}`,
+            monsterColor: monster.monster_color,
+          })),
+        );
+      });
+  }, []);
 
   const styles = {
     sectionContainer: {
@@ -60,7 +50,7 @@ export default function MonsterSection({
   function returnToNeutralImage(dropId: string | null) {
     setTimeout(() => {
       const updateMonsterImage = monsters.map((monster) => {
-        if (monster.dropId === dropId) {
+        if (monster.materialType === dropId) {
           return { ...monster, image: monster.imageNeutral };
         }
         return monster;
@@ -72,7 +62,7 @@ export default function MonsterSection({
   useEffect(() => {
     if (correctAnswer === true) {
       const updateMonsterImage = monsters.map((monster) => {
-        if (monster.dropId === dropId) {
+        if (monster.materialType === dropId) {
           return { ...monster, image: monster.imageHappy };
         }
         return monster;
@@ -82,7 +72,7 @@ export default function MonsterSection({
       dropId ? returnToNeutralImage(dropId) : null;
     } else if (correctAnswer === false) {
       const updateMonsterImage = monsters.map((monster) => {
-        if (monster.dropId === dropId) {
+        if (monster.materialType === dropId) {
           return { ...monster, image: monster.imageSad };
         }
         return monster;
@@ -97,10 +87,12 @@ export default function MonsterSection({
     <div style={styles.sectionContainer}>
       {monsters.map((monster) => (
         <Monster
-          key={monster.dropId}
+          key={monster.id}
           name={monster.name}
           image={monster.image}
-          dropId={monster.dropId}
+          dropId={monster.materialType}
+          monsterIcon={monster.monsterIcon}
+          monsterColor={monster.monsterColor}
         />
       ))}
     </div>

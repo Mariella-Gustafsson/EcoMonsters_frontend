@@ -8,9 +8,18 @@ interface MonsterProps {
   name?: string;
   image?: string;
   dropId?: string;
+  monsterIcon?: string;
+  monsterColor?: string;
 }
 
-export default function Monster({ id, name, image, dropId }: MonsterProps) {
+export default function Monster({
+  id,
+  name,
+  image,
+  dropId,
+  monsterIcon,
+  monsterColor,
+}: MonsterProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: `${dropId}`,
   });
@@ -57,7 +66,7 @@ export default function Monster({ id, name, image, dropId }: MonsterProps) {
 
   return (
     <div style={styles.sectionStyle} ref={setNodeRef}>
-      <CircleIcon />
+      <CircleIcon monsterIcon={monsterIcon} monsterColor={monsterColor} />
       <div style={styles.imageContainer}>
         <img id={id} style={styles.monsterImage} src={image} alt={name} />
       </div>
