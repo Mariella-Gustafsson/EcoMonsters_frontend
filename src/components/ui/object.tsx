@@ -1,10 +1,15 @@
 import type { CSSProperties } from "react";
 import { useDraggable } from "@dnd-kit/core";
 
-export default function Object() {
+interface ObjectProps {
+  image?: string;
+  category: string;
+}
+
+export default function Object({ image, category }: ObjectProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
-      id: "carton",
+      id: category,
     });
 
   const styles: { objectImage: CSSProperties } = {
@@ -25,8 +30,8 @@ export default function Object() {
     <div>
       <img
         style={styles.objectImage}
-        src="/images/egg-carton.png"
-        alt="Egg Carton"
+        src={image}
+        alt={category}
         ref={setNodeRef}
         {...listeners}
         {...attributes}
