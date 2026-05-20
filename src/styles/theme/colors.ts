@@ -6,11 +6,12 @@ export const colors = {
   muted: "#6b5e4d",
   primary: "#e8c63e",
   primaryHover: "#d4a92f",
+  secondary: "#e2c69e",
   secondaryButton: "linear-gradient(to bottom, #edebe6 0%, #e2c69e 100%)",
   secondaryHover: "#cdb18b",
   success: "#2ecc71",
   incorrect: "#ff4d4d",
-  border: "#00000020",
+  border: "#00000050",
   accentBorder: "#345e08",
   shadow: "10px 10px 10px rgba(3, 3, 3, 0.5)",
 };

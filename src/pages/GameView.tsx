@@ -18,6 +18,8 @@ function GameView() {
   const [isLoadingItems, setIsLoadingItems] = useState(true);
   const [isOverDropZone, setIsOverDropZone] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const sortedCount = items.filter((i) => i.status === "sorted").length;
 
   useEffect(() => {
     fetch("http://localhost:5000/api/monsters")
@@ -50,6 +52,7 @@ function GameView() {
             name: item.name,
             image: `http://localhost:5000${item.image_url}`,
             materialType: item.correct_material,
+            status: "unsorted",
           })),
         );
         setIsLoadingItems(false);
@@ -67,8 +70,11 @@ function GameView() {
     if (active.data.current.materialType === over.id) {
       setDropId(over.id);
       setCorrectAnswer(true);
-      const updateItems = items.filter((item) => item.id !== active.id);
-      setItems(updateItems);
+      setItems((prev) =>
+        prev.map((item) =>
+          item.id === active.id ? { ...item, status: "sorted" } : item,
+        ),
+      );
     } else {
       setDropId(over.id);
       setCorrectAnswer(false);
@@ -88,7 +94,7 @@ function GameView() {
 
       timeoutRef.current = setTimeout(() => {
         setMonsters(updateMonsterImage);
-      }, 2000);
+      }, 1000);
     } else {
       setMonsters(updateMonsterImage);
     }
@@ -100,8 +106,6 @@ function GameView() {
         ...monster,
         image: monster.imageNeutral,
       }));
-
-      console.log("UPDATED:", updated);
       return updated;
     });
   }
@@ -146,6 +150,7 @@ function GameView() {
       setMonsters(updateMonsterImage);
       setCorrectAnswer && setCorrectAnswer(null);
       dropId ? returnToNeutralImage(dropId, true) : null;
+      setActiveIndex((prev) => prev + 1);
     } else if (correctAnswer === false) {
       const updateMonsterImage = monsters.map((monster) => {
         if (monster.materialType === dropId) {
@@ -160,13 +165,20 @@ function GameView() {
   }, [correctAnswer, dropId]);
 
   useEffect(() => {
-    const randomItem = items[Math.floor(Math.random() * items.length)];
+    const sortedItems = items.filter((item) => item.status === "unsorted");
+
+    const randomItem =
+      sortedItems[Math.floor(Math.random() * sortedItems.length)];
     setRandomItem(randomItem);
   }, [items]);
 
   return (
     <DndContext onDragEnd={handleDragEnd} onDragOver={handleDragOver}>
-      <Header />
+      <Header
+        progress={sortedCount}
+        length={items.length}
+        activeIndex={activeIndex}
+      />
       {isLoadingMonsters ? (
         <p>Loading...</p>
       ) : (

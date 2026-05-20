@@ -10,4 +10,5 @@ export type Item = {
   id: number;
   image: string;
   materialType: string;
+  status: "unsorted" | "sorted";
 };
