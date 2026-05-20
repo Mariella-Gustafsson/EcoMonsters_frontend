@@ -53,8 +53,10 @@ body,
   background-size: 100% 100%;
   background-repeat: no-repeat;
   opacity: 0.9;
+  height: 100vh;
   min-height: 100vh;
   max-height: 100vh;
+  gap: 10px;
 }
 
 .game-header {
