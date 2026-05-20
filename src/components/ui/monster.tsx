@@ -58,9 +58,7 @@ export default function Monster({
       padding: "10px 0",
     },
     imageContainer: {
-      aspectRatio: "1 / 1",
       width: "100%",
-      height: "100%",
     },
   };
 

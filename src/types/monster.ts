@@ -6,6 +6,7 @@ export type MonsterAPI = {
   monster_neutral_image_url: string;
   monster_happy_image_url: string;
   monster_sad_image_url: string;
+  monster_eating_image_url: string;
   material_type: string;
   monster_icon: string;
   monster_color: string;
@@ -19,6 +20,7 @@ export type Monster = {
   imageNeutral: string;
   imageHappy: string;
   imageSad: string;
+  imageEating: string;
   materialType: string;
   monsterIcon: string;
   monsterColor: string;

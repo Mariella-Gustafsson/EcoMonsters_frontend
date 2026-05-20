@@ -16,16 +16,17 @@ export default function ObjectSection({
     objectContainer: CSSProperties;
   } = {
     objectContainer: {
-      width: "20%",
       borderRadius: "20px",
       minHeight: "0",
+      height: "100%",
     },
     sectionContainer: {
       display: "flex",
       flex: 1,
-      height: "100%",
+      minHeight: 0,
       justifyContent: "center",
       gap: "50px",
+      marginBottom: "20px",
     },
   };
 
@@ -34,7 +35,11 @@ export default function ObjectSection({
       <div style={styles.objectContainer} className="object-section">
         {isLoading ? <p>Loading...</p> : null}
         {!isLoading && randomItem ? (
-          <Object image={randomItem.image} category={randomItem.category} />
+          <Object
+            id={randomItem.id}
+            image={randomItem.image}
+            materialType={randomItem.materialType}
+          />
         ) : null}
       </div>
     </div>
