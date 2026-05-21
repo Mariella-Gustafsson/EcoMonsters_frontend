@@ -1,13 +1,15 @@
 import { spacing } from "../../styles/theme";
 import { colors } from "../../styles/theme/colors";
 import { typography } from "../../styles/theme";
+import type { CSSProperties } from "react";
 
 interface ButtonProps {
   label: string;
   rounded?: boolean;
+  style?: CSSProperties;
 }
 
-export default function Button({ label, rounded }: ButtonProps) {
+export default function Button({ label, rounded, style }: ButtonProps) {
   const styles = {
     buttonStyle: {
       backgroundColor: colors.primary,
@@ -30,5 +32,5 @@ export default function Button({ label, rounded }: ButtonProps) {
     },
   };
 
-  return <button style={styles.buttonStyle}>{label}</button>;
+  return <button style={{ ...styles.buttonStyle, ...style }}>{label}</button>;
 }

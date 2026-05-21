@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import type { Item, ItemsAPI } from "../types/item";
 import type { MonsterAPI } from "../types/monster";
 import type { Monster as MonsterType } from "../types/monster";
+import ResultsModal from "../components/modals/ResultsModal";
 
 function GameView() {
   const [correctAnswer, setCorrectAnswer] = useState<boolean | null>(null);
@@ -20,6 +21,7 @@ function GameView() {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const sortedCount = items.filter((i) => i.status === "sorted").length;
+  const [showResults, setShowResults] = useState(true);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/monsters")
@@ -194,6 +196,7 @@ function GameView() {
       ) : (
         <ObjectSection randomItem={randomItem} isLoading={isLoadingItems} />
       )}
+      {showResults && <ResultsModal />}
     </DndContext>
   );
 }
