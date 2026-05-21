@@ -7,8 +7,9 @@ export default function ScoreSection() {
       display: "flex",
       flex: 1,
       width: "100%",
-      gap: "20px",
-      padding: "0 50px",
+      gap: "10px",
+      padding: "10px 50px",
+      height: "100%",
     },
   };
   return (

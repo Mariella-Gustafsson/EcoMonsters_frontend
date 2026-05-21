@@ -3,10 +3,12 @@ import type { CSSProperties } from "react";
 interface CircleIconProps {
   monsterIcon?: string;
   monsterColor?: string;
+  style?: CSSProperties;
 }
 export default function CircleIcon({
   monsterIcon,
   monsterColor,
+  style,
 }: CircleIconProps) {
   const styles: { container: CSSProperties } = {
     container: {
@@ -21,7 +23,7 @@ export default function CircleIcon({
     },
   };
   return (
-    <div style={styles.container}>
+    <div style={{ ...styles.container, ...style }}>
       <img src={monsterIcon} alt="Monster Icon" />
     </div>
   );
