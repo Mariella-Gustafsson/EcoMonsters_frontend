@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import kompostinaHappy from "../assets/images/Kompostina-happy.png";
 import plastellaHappy from "../assets/images/Plastella-happy.png";
-import honeyJar from "../assets/images/honey-jar.png";
+import trophee from "../assets/images/trophee.png";
 
 export default function MonsterShowcase() {
   const styles: {
@@ -25,7 +25,7 @@ export default function MonsterShowcase() {
         <img src={kompostinaHappy} style={styles.image} />
       </div>
       <div style={styles.imageContainer}>
-        <img src={honeyJar} style={styles.image} />
+        <img src={trophee} style={styles.image} />
       </div>
       <div style={styles.imageContainer}>
         <img src={plastellaHappy} style={styles.image} />
