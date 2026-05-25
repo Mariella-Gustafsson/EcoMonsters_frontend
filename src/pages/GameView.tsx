@@ -5,8 +5,9 @@ import ObjectSection from "../components/layout/object-section";
 import { DndContext } from "@dnd-kit/core";
 import { useEffect } from "react";
 import type { Item, ItemsAPI } from "../types/item";
-import type { MonsterAPI } from "../types/monster";
-import type { Monster as MonsterType } from "../types/monster";
+import type { MonsterAPI, Monster as MonsterType } from "../types/monster";
+import type { Score } from "../types/score";
+import ResultsModal from "../components/modals/ResultsModal";
 
 function GameView() {
   const [correctAnswer, setCorrectAnswer] = useState<boolean | null>(null);
@@ -19,7 +20,11 @@ function GameView() {
   const [isOverDropZone, setIsOverDropZone] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const sortedCount = items.filter((i) => i.status === "sorted").length;
+  const sortedCount = items.filter(
+    (i) => i.status === "correct" || "incorrect",
+  ).length;
+  const [showResults, setShowResults] = useState(false);
+  const [score, setScore] = useState<Score | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/monsters")
@@ -59,26 +64,62 @@ function GameView() {
       });
   }, []);
 
+  function isSortingComplete(items: Item[]) {
+    const areAllItemsSorted = items.every((item) => item.status !== "unsorted");
+
+    if (!areAllItemsSorted) return false;
+    return true;
+  }
+
+  function getScore(items: Item[]) {
+    const correctCount = items.filter((i) => i.status === "correct").length;
+    const wrongCount = items.filter((i) => i.status === "incorrect").length;
+    setShowResults(true);
+
+    return {
+      correctCount,
+      wrongCount,
+    };
+  }
+
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
+
     if (!over) {
       setDropId(null);
       setIsOverDropZone(false);
       resetMonsterImages();
       return;
     }
+
+    let updatedItems: Item[];
+
     if (active.data.current.materialType === over.id) {
       setDropId(over.id);
       setCorrectAnswer(true);
-      setItems((prev) =>
-        prev.map((item) =>
-          item.id === active.id ? { ...item, status: "sorted" } : item,
-        ),
+
+      updatedItems = items.map((item) =>
+        item.id === active.id ? { ...item, status: "correct" } : item,
       );
     } else {
       setDropId(over.id);
       setCorrectAnswer(false);
+
+      updatedItems = items.map((item) =>
+        item.id === active.id ? { ...item, status: "incorrect" } : item,
+      );
     }
+
+    setItems(updatedItems);
+
+    const sortingCompleted = isSortingComplete(updatedItems);
+
+    if (!sortingCompleted) return;
+
+    const score = getScore(updatedItems);
+
+    setScore(score);
+    setShowResults(true);
   };
 
   function returnToNeutralImage(dropId: string | null, willDelay = false) {
@@ -193,6 +234,13 @@ function GameView() {
         <p>Loading...</p>
       ) : (
         <ObjectSection randomItem={randomItem} isLoading={isLoadingItems} />
+      )}
+      {showResults && score && (
+        <ResultsModal
+          correctAnswers={score.correctCount}
+          totalItems={items.length}
+          wrongAnswers={score.wrongCount}
+        />
       )}
     </DndContext>
   );
