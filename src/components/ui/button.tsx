@@ -15,7 +15,7 @@ export default function Button({ label, rounded, style }: ButtonProps) {
       backgroundColor: colors.primary,
       color: colors.text,
       padding: spacing.lg,
-      fontSize: typography.fontSizes.lg,
+      fontSize: typography.fontSizes.md,
       fontFamily: typography.fonts.text,
       fontWeight: typography.weights.semiBold,
       borderRadius: rounded ? "50%" : "999px",

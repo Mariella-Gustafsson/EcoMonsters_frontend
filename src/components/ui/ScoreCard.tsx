@@ -7,9 +7,10 @@ import CircleIcon from "./circle-icon";
 
 interface ScoreCardProps {
   scoreType: "right" | "wrong" | "total";
+  numberProps: number | null;
 }
 
-export default function ScoreCard({ scoreType }: ScoreCardProps) {
+export default function ScoreCard({ scoreType, numberProps }: ScoreCardProps) {
   const styles: {
     right: CSSProperties;
     total: CSSProperties;
@@ -65,26 +66,23 @@ export default function ScoreCard({ scoreType }: ScoreCardProps) {
   let scoreText = "";
   let cardIcon = "";
   let circleColor = "";
-  let scoreNumber: number | null = null;
+  let number: number | null = numberProps;
 
   if (scoreType === "right") {
     style = styles.right;
     scoreText = "Rätt";
     cardIcon = checkMark;
     circleColor = "#147120";
-    scoreNumber = 6;
   } else if (scoreType === "wrong") {
     style = styles.wrong;
     scoreText = "Fel";
     cardIcon = wrongMark;
     circleColor = "#bf2828";
-    scoreNumber = 4;
   } else if (scoreType === "total") {
     style = styles.total;
     scoreText = "Total";
     cardIcon = boxMark;
     circleColor = "#ada72a";
-    scoreNumber = 10;
   }
 
   return (
@@ -95,7 +93,7 @@ export default function ScoreCard({ scoreType }: ScoreCardProps) {
         style={styles.circleIcon}
       />
       <h2 style={styles.scoreText}>{scoreText}</h2>
-      <p style={styles.number}>{scoreNumber}</p>
+      <p style={styles.number}>{number}</p>
     </div>
   );
 }

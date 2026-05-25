@@ -1,7 +1,17 @@
 import type { CSSProperties } from "react";
 import ScoreCard from "./ui/ScoreCard";
 
-export default function ScoreSection() {
+interface ScoreSectionProps {
+  correctAnswers: number | null;
+  totalItems: number | null;
+  wrongAnswers: number | null;
+}
+
+export default function ScoreSection({
+  correctAnswers,
+  totalItems,
+  wrongAnswers,
+}: ScoreSectionProps) {
   const styles: { container: CSSProperties } = {
     container: {
       display: "flex",
@@ -14,9 +24,9 @@ export default function ScoreSection() {
   };
   return (
     <div style={styles.container}>
-      <ScoreCard scoreType="right" />
-      <ScoreCard scoreType="total" />
-      <ScoreCard scoreType="wrong" />
+      <ScoreCard scoreType="right" numberProps={correctAnswers} />
+      <ScoreCard scoreType="total" numberProps={totalItems} />
+      <ScoreCard scoreType="wrong" numberProps={wrongAnswers} />
     </div>
   );
 }

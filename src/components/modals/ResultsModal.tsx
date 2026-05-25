@@ -7,7 +7,17 @@ import ResultMessage from "../ResultMessage";
 import Button from "../ui/button";
 import { spacing } from "../../styles/theme";
 
-export default function ResultsModal() {
+interface ResultsModalProps {
+  correctAnswers: number | null;
+  totalItems: number | null;
+  wrongAnswers: number | null;
+}
+
+export default function ResultsModal({
+  correctAnswers,
+  totalItems,
+  wrongAnswers,
+}: ResultsModalProps) {
   const styles: {
     viewPortContainer: CSSProperties;
     modalContainer: CSSProperties;
@@ -53,7 +63,11 @@ export default function ResultsModal() {
       <div style={styles.modalContainer}>
         <ModalHeader />
         <MonsterShowcase />
-        <ScoreSection />
+        <ScoreSection
+          correctAnswers={correctAnswers}
+          totalItems={totalItems}
+          wrongAnswers={wrongAnswers}
+        />
         <ResultMessage />
         <Button label={buttonLabel} style={styles.buttonStyle} />
       </div>

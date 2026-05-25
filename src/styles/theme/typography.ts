@@ -15,8 +15,8 @@ export const typography = {
   fontSizes: {
     xs: "0.75rem", // 12px
     sm: "0.875rem", // 14px
-    md: "1rem", // 16px
-    lg: "1.5rem", // 20px
+    md: "1.25rem", // 16px
+    lg: "2rem", // 20px
     xl: "3rem", // 24px
     xxl: "4rem", // 32px
     xxxl: "6rem",

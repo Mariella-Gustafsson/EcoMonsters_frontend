@@ -53,7 +53,7 @@ export default function Monster({
       margin: "0px",
       textAlign: "center",
       fontFamily: typography.fonts.heading,
-      fontSize: typography.fontSizes.xxl,
+      fontSize: typography.fontSizes.lg,
       color: colors.text,
       padding: "10px 0",
     },
