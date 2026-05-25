@@ -7,9 +7,15 @@ interface ButtonProps {
   label: string;
   rounded?: boolean;
   style?: CSSProperties;
+  handlePress?: () => void;
 }
 
-export default function Button({ label, rounded, style }: ButtonProps) {
+export default function Button({
+  label,
+  rounded,
+  style,
+  handlePress,
+}: ButtonProps) {
   const styles = {
     buttonStyle: {
       backgroundColor: colors.primary,
@@ -32,5 +38,9 @@ export default function Button({ label, rounded, style }: ButtonProps) {
     },
   };
 
-  return <button style={{ ...styles.buttonStyle, ...style }}>{label}</button>;
+  return (
+    <button style={{ ...styles.buttonStyle, ...style }} onClick={handlePress}>
+      {label}
+    </button>
+  );
 }

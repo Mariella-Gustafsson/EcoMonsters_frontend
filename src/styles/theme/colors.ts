@@ -1,10 +1,12 @@
 export const colors = {
   background: "#3f6f0a",
   surface: "#f1ddc4",
-  textTitle: "#ffffff",
+  white: "#ffffff",
   text: "#2f1b0e",
+  textTitle: "#1c8117",
   muted: "#6b5e4d",
   primary: "#e8c63e",
+  primaryButton: "linear-gradient(to bottom, #e7daa9 0%, #e8c63e 100%)",
   primaryHover: "#d4a92f",
   secondary: "#e2c69e",
   secondaryButton: "linear-gradient(to bottom, #edebe6 0%, #e2c69e 100%)",
