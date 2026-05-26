@@ -157,6 +157,10 @@ function GameView() {
     setShowMonsterInfo(true);
   };
 
+  const handleCloseButton = () => {
+    setShowMonsterInfo(false);
+  };
+
   useEffect(() => {
     if (dropId === null && isOverDropZone === false) {
       resetMonsterImages();
@@ -249,7 +253,12 @@ function GameView() {
           wrongAnswers={score.wrongCount}
         />
       )}
-      {showMonsterInfo && monsters && <MonstersModal monsters={monsters} />}
+      {showMonsterInfo && monsters && (
+        <MonstersModal
+          monsters={monsters}
+          handleCloseButton={handleCloseButton}
+        />
+      )}
     </DndContext>
   );
 }

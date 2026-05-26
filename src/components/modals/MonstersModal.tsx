@@ -8,9 +8,13 @@ import Button from "../ui/button";
 
 interface MonstersModalProps {
   monsters: Monster[];
+  handleCloseButton: () => void;
 }
 
-export default function MonstersModal({ monsters }: MonstersModalProps) {
+export default function MonstersModal({
+  monsters,
+  handleCloseButton,
+}: MonstersModalProps) {
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const styles: {
@@ -81,18 +85,40 @@ export default function MonstersModal({ monsters }: MonstersModalProps) {
       background: colors.primaryButton,
     },
   };
+
   let monsterName = monsters?.[activeIndex]?.name;
   let headerText = `Möt ${monsterName}`;
   let monsterImage = monsters?.[activeIndex]?.image;
   let monsterDescription = monsters?.[activeIndex]?.description;
 
-  //const handleForwardClick = () => {headerText = monsters[activeIndex].name};
+  const handleForwardButton = () => {
+    setActiveIndex((prev) => (prev === monsters.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleBackButton = () => {
+    setActiveIndex((prev) => (prev === 0 ? monsters.length - 1 : prev - 1));
+  };
 
   return (
     <ModalWrapper>
-      <Button style={styles.closeButton} rounded={true} label="X" />
-      <Button style={styles.forwardButton} rounded={true} label=">" />
-      <Button style={styles.backButton} rounded={true} label="<" />
+      <Button
+        style={styles.closeButton}
+        rounded={true}
+        label="X"
+        handlePress={handleCloseButton}
+      />
+      <Button
+        style={styles.forwardButton}
+        rounded={true}
+        label=">"
+        handlePress={handleForwardButton}
+      />
+      <Button
+        style={styles.backButton}
+        rounded={true}
+        label="<"
+        handlePress={handleBackButton}
+      />
       <ModalHeader modalHeaderText={headerText} />
       <div style={styles.container}>
         <div style={styles.imageContainer}>
