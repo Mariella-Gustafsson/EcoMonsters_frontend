@@ -8,9 +8,15 @@ interface HeaderProps {
   progress: number;
   length: number;
   activeIndex: number;
+  primaryAction: () => void;
 }
 
-export default function Header({ progress, length, activeIndex }: HeaderProps) {
+export default function Header({
+  progress,
+  length,
+  activeIndex,
+  primaryAction,
+}: HeaderProps) {
   const styles: { container: CSSProperties; imageContainer: CSSProperties } = {
     container: {
       height: "100%",
@@ -39,7 +45,7 @@ export default function Header({ progress, length, activeIndex }: HeaderProps) {
             activeIndex={activeIndex}
           />
         </div>
-        <Button label="Monsters" />
+        <Button label="Monsters" handlePress={primaryAction} />
       </div>
     </header>
   );

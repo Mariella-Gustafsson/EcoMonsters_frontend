@@ -8,6 +8,7 @@ import type { Item, ItemsAPI } from "../types/item";
 import type { MonsterAPI, Monster as MonsterType } from "../types/monster";
 import type { Score } from "../types/score";
 import ResultsModal from "../components/modals/ResultsModal";
+import MonstersModal from "../components/modals/MonstersModal";
 
 function GameView() {
   const [correctAnswer, setCorrectAnswer] = useState<boolean | null>(null);
@@ -25,6 +26,7 @@ function GameView() {
   ).length;
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState<Score | null>(null);
+  const [showMonsterInfo, setShowMonsterInfo] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/monsters")
@@ -151,6 +153,14 @@ function GameView() {
     });
   }
 
+  const handleInfoPress = () => {
+    setShowMonsterInfo(true);
+  };
+
+  const handleCloseButton = () => {
+    setShowMonsterInfo(false);
+  };
+
   useEffect(() => {
     if (dropId === null && isOverDropZone === false) {
       resetMonsterImages();
@@ -219,6 +229,7 @@ function GameView() {
         progress={sortedCount}
         length={items.length}
         activeIndex={activeIndex}
+        primaryAction={handleInfoPress}
       />
       {isLoadingMonsters ? (
         <p>Loading...</p>
@@ -240,6 +251,12 @@ function GameView() {
           correctAnswers={score.correctCount}
           totalItems={items.length}
           wrongAnswers={score.wrongCount}
+        />
+      )}
+      {showMonsterInfo && monsters && (
+        <MonstersModal
+          monsters={monsters}
+          handleCloseButton={handleCloseButton}
         />
       )}
     </DndContext>
