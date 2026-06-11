@@ -4,11 +4,12 @@ import MonsterSection from "../components/layout/monster-section";
 import ObjectSection from "../components/layout/object-section";
 import { DndContext } from "@dnd-kit/core";
 import { useEffect } from "react";
-import type { Item, ItemsAPI } from "../types/item";
-import type { MonsterAPI, Monster as MonsterType } from "../types/monster";
+import type { Item } from "../types/item";
+import type { Monster as MonsterType } from "../types/monster";
 import type { Score } from "../types/score";
 import ResultsModal from "../components/modals/ResultsModal";
 import MonstersModal from "../components/modals/MonstersModal";
+import { fetchItems, fetchMonsters } from "../services/api";
 
 function GameView() {
   const [correctAnswer, setCorrectAnswer] = useState<boolean | null>(null);
@@ -29,41 +30,15 @@ function GameView() {
   const [showMonsterInfo, setShowMonsterInfo] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/monsters")
-      .then((response) => response.json())
-      .then((data) => {
-        setMonsters(
-          data.map((monster: MonsterAPI) => ({
-            id: monster.id,
-            description: monster.description,
-            name: monster.name,
-            image: `http://localhost:5000${monster.monster_neutral_image_url}`,
-            imageNeutral: `http://localhost:5000${monster.monster_neutral_image_url}`,
-            imageHappy: `http://localhost:5000${monster.monster_happy_image_url}`,
-            imageSad: `http://localhost:5000${monster.monster_sad_image_url}`,
-            imageEating: `http://localhost:5000${monster.monster_eating_image_url}`,
-            materialType: monster.material_type,
-            monsterIcon: `http://localhost:5000${monster.monster_icon}`,
-            monsterColor: monster.monster_color,
-          })),
-        );
-        setIsLoadingMonsters(false);
-      });
+    fetchMonsters().then((data) => {
+      setMonsters(data);
+      setIsLoadingMonsters(false);
+    });
 
-    fetch("http://localhost:5000/api/items")
-      .then((response) => response.json())
-      .then((data) => {
-        setItems(
-          data.map((item: ItemsAPI) => ({
-            id: item.id,
-            name: item.name,
-            image: `http://localhost:5000${item.image_url}`,
-            materialType: item.correct_material,
-            status: "unsorted",
-          })),
-        );
-        setIsLoadingItems(false);
-      });
+    fetchItems().then((data) => {
+      setItems(data);
+      setIsLoadingItems(false);
+    });
   }, []);
 
   function isSortingComplete(items: Item[]) {

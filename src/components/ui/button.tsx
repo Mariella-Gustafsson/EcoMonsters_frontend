@@ -2,6 +2,7 @@ import { spacing } from "../../styles/theme";
 import { colors } from "../../styles/theme/colors";
 import { typography } from "../../styles/theme";
 import type { CSSProperties } from "react";
+import "../../styles/game-layout-styles.css";
 
 interface ButtonProps {
   label: string;
@@ -18,7 +19,7 @@ export default function Button({
 }: ButtonProps) {
   const styles = {
     buttonStyle: {
-      backgroundColor: colors.primary,
+      background: colors.secondaryButton,
       color: colors.text,
       padding: spacing.lg,
       fontSize: typography.fontSizes.md,
@@ -29,7 +30,6 @@ export default function Button({
       height: rounded ? "70px" : "auto",
       cursor: "pointer",
       border: "none",
-      background: colors.secondaryButton,
       textShadow: "0 1px 1px rgba(0,0,0,0.2)",
       boxShadow: colors.shadow,
     },
@@ -39,7 +39,11 @@ export default function Button({
   };
 
   return (
-    <button style={{ ...styles.buttonStyle, ...style }} onClick={handlePress}>
+    <button
+      style={{ ...styles.buttonStyle, ...style }}
+      onClick={handlePress}
+      className="button-hover"
+    >
       {label}
     </button>
   );

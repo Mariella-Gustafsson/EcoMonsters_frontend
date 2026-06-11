@@ -39,7 +39,7 @@ export default function MonstersModal({
       flexDirection: "column",
       alignItems: "center",
       flex: 1,
-      backgroundColor: "#79bb1570",
+      backgroundColor: "#ad6e1070",
       borderRadius: "30px",
       padding: spacing.lg,
     },
@@ -47,7 +47,7 @@ export default function MonstersModal({
       margin: 0,
       fontFamily: typography.fonts.heading,
       fontSize: typography.fontSizes.lg,
-      color: colors.textTitle,
+      color: "#845610",
     },
     imageContainer: { flex: 1, width: "100%" },
     monsterImage: {
