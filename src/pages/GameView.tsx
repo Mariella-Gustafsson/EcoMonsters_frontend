@@ -10,16 +10,15 @@ import type { Score } from "../types/score";
 import ResultsModal from "../components/modals/ResultsModal";
 import MonstersModal from "../components/modals/MonstersModal";
 import { fetchItems, fetchMonsters } from "../services/api";
+import { useDragAndDrop } from "../hooks/useDragAndDrop";
 
 function GameView() {
   const [correctAnswer, setCorrectAnswer] = useState<boolean | null>(null);
-  const [dropId, setDropId] = useState<string | null>(null);
   const [randomItem, setRandomItem] = useState<Item | null>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [monsters, setMonsters] = useState<MonsterType[]>([]);
   const [isLoadingMonsters, setIsLoadingMonsters] = useState(true);
   const [isLoadingItems, setIsLoadingItems] = useState(true);
-  const [isOverDropZone, setIsOverDropZone] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const sortedCount = items.filter(
@@ -28,6 +27,17 @@ function GameView() {
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState<Score | null>(null);
   const [showMonsterInfo, setShowMonsterInfo] = useState(false);
+
+  const {
+    handleDragOver,
+    handleDragEnd,
+    dropId,
+    activeItem,
+    activeItemId,
+    isOverDropZone,
+    itemDropped,
+    reset,
+  } = useDragAndDrop();
 
   useEffect(() => {
     fetchMonsters().then((data) => {
@@ -59,32 +69,25 @@ function GameView() {
     };
   }
 
-  const handleDragEnd = (event: any) => {
-    const { active, over } = event;
-
-    if (!over) {
-      setDropId(null);
-      setIsOverDropZone(false);
-      resetMonsterImages();
-      return;
-    }
+  useEffect(() => {
+    if (!itemDropped) return;
 
     let updatedItems: Item[];
 
-    if (active.data.current.materialType === over.id) {
-      setDropId(over.id);
+    if (activeItem === dropId) {
       setCorrectAnswer(true);
 
       updatedItems = items.map((item) =>
-        item.id === active.id ? { ...item, status: "correct" } : item,
+        item.id === activeItemId ? { ...item, status: "correct" } : item,
       );
+      reset();
     } else {
-      setDropId(over.id);
       setCorrectAnswer(false);
 
       updatedItems = items.map((item) =>
-        item.id === active.id ? { ...item, status: "incorrect" } : item,
+        item.id === activeItemId ? { ...item, status: "incorrect" } : item,
       );
+      reset();
     }
 
     setItems(updatedItems);
@@ -97,7 +100,8 @@ function GameView() {
 
     setScore(score);
     setShowResults(true);
-  };
+    reset();
+  }, [isOverDropZone, dropId, activeItem, itemDropped]);
 
   function returnToNeutralImage(dropId: string | null, willDelay = false) {
     const updateMonsterImage = monsters.map((monster) => {
@@ -137,33 +141,21 @@ function GameView() {
   };
 
   useEffect(() => {
-    if (dropId === null && isOverDropZone === false) {
-      resetMonsterImages();
-    }
-  }, [dropId, isOverDropZone]);
-
-  const handleDragOver = (event: any) => {
-    const { over } = event;
-    if (!over) {
-      setIsOverDropZone(false);
-      setDropId(null);
+    if (!isOverDropZone) {
       resetMonsterImages();
       return;
     }
 
-    const overId = over.id as string;
-    setIsOverDropZone(true);
-    setDropId(overId);
     setMonsters((prev) =>
       prev.map((monster) => ({
         ...monster,
         image:
-          monster.materialType === overId
+          monster.materialType === dropId
             ? monster.imageEating
             : monster.imageNeutral,
       })),
     );
-  };
+  }, [dropId, isOverDropZone]);
 
   useEffect(() => {
     if (correctAnswer === true) {
@@ -192,7 +184,6 @@ function GameView() {
 
   useEffect(() => {
     const sortedItems = items.filter((item) => item.status === "unsorted");
-
     const randomItem =
       sortedItems[Math.floor(Math.random() * sortedItems.length)];
     setRandomItem(randomItem);
