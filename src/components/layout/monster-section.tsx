@@ -2,9 +2,6 @@ import Monster from "../ui/monster";
 import type { Monster as MonsterType } from "../../types/monster";
 
 interface MonsterSectionProps {
-  correctAnswer: boolean | null;
-  dropId?: string | null;
-  setCorrectAnswer?: React.Dispatch<React.SetStateAction<boolean | null>>;
   monsters: MonsterType[];
 }
 

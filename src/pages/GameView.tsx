@@ -6,14 +6,13 @@ import { DndContext } from "@dnd-kit/core";
 import { useEffect } from "react";
 import type { Item } from "../types/item";
 import type { Monster as MonsterType } from "../types/monster";
-import type { Score } from "../types/score";
 import ResultsModal from "../components/modals/ResultsModal";
 import MonstersModal from "../components/modals/MonstersModal";
 import { fetchItems, fetchMonsters } from "../services/api";
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
+import { useGameLogic } from "../hooks/useGameLogic";
 
 function GameView() {
-  const [correctAnswer, setCorrectAnswer] = useState<boolean | null>(null);
   const [randomItem, setRandomItem] = useState<Item | null>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [monsters, setMonsters] = useState<MonsterType[]>([]);
@@ -24,9 +23,8 @@ function GameView() {
   const sortedCount = items.filter(
     (i) => i.status === "correct" || "incorrect",
   ).length;
-  const [showResults, setShowResults] = useState(false);
-  const [score, setScore] = useState<Score | null>(null);
   const [showMonsterInfo, setShowMonsterInfo] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
   const {
     handleDragOver,
@@ -38,6 +36,15 @@ function GameView() {
     itemDropped,
     reset,
   } = useDragAndDrop();
+
+  const {
+    validateAnswer,
+    isSortingComplete,
+    getScore,
+    score,
+    correctAnswer,
+    resetAnswer,
+  } = useGameLogic();
 
   useEffect(() => {
     fetchMonsters().then((data) => {
@@ -51,39 +58,19 @@ function GameView() {
     });
   }, []);
 
-  function isSortingComplete(items: Item[]) {
-    const areAllItemsSorted = items.every((item) => item.status !== "unsorted");
-
-    if (!areAllItemsSorted) return false;
-    return true;
-  }
-
-  function getScore(items: Item[]) {
-    const correctCount = items.filter((i) => i.status === "correct").length;
-    const wrongCount = items.filter((i) => i.status === "incorrect").length;
-    setShowResults(true);
-
-    return {
-      correctCount,
-      wrongCount,
-    };
-  }
-
   useEffect(() => {
     if (!itemDropped) return;
 
     let updatedItems: Item[];
 
-    if (activeItem === dropId) {
-      setCorrectAnswer(true);
+    const isCorrect = validateAnswer(activeItem, dropId);
 
+    if (isCorrect) {
       updatedItems = items.map((item) =>
         item.id === activeItemId ? { ...item, status: "correct" } : item,
       );
       reset();
     } else {
-      setCorrectAnswer(false);
-
       updatedItems = items.map((item) =>
         item.id === activeItemId ? { ...item, status: "incorrect" } : item,
       );
@@ -91,17 +78,12 @@ function GameView() {
     }
 
     setItems(updatedItems);
-
     const sortingCompleted = isSortingComplete(updatedItems);
-
     if (!sortingCompleted) return;
 
-    const score = getScore(updatedItems);
-
-    setScore(score);
+    getScore(updatedItems);
     setShowResults(true);
-    reset();
-  }, [isOverDropZone, dropId, activeItem, itemDropped]);
+  }, [itemDropped, activeItem, dropId, activeItemId, items, reset]);
 
   function returnToNeutralImage(dropId: string | null, willDelay = false) {
     const updateMonsterImage = monsters.map((monster) => {
@@ -166,7 +148,7 @@ function GameView() {
         return monster;
       });
       setMonsters(updateMonsterImage);
-      setCorrectAnswer && setCorrectAnswer(null);
+      resetAnswer && resetAnswer();
       dropId ? returnToNeutralImage(dropId, true) : null;
       setActiveIndex((prev) => prev + 1);
     } else if (correctAnswer === false) {
@@ -177,7 +159,7 @@ function GameView() {
         return monster;
       });
       setMonsters(updateMonsterImage);
-      setCorrectAnswer && setCorrectAnswer(null);
+      resetAnswer && resetAnswer();
       dropId ? returnToNeutralImage(dropId, true) : null;
     }
   }, [correctAnswer, dropId]);
@@ -200,12 +182,7 @@ function GameView() {
       {isLoadingMonsters ? (
         <p>Loading...</p>
       ) : (
-        <MonsterSection
-          monsters={monsters}
-          correctAnswer={correctAnswer}
-          dropId={dropId}
-          setCorrectAnswer={setCorrectAnswer}
-        />
+        <MonsterSection monsters={monsters} />
       )}
       {isLoadingItems ? (
         <p>Loading...</p>
